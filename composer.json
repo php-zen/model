@@ -1,0 +1,34 @@
+{
+    "name": "zen/model",
+    "description": "Modeling support of Zen framework",
+    "version": "0.1.0-dev",
+    "keywords": [
+        "zen"
+    ],
+    "license": "LGPL-3.0+",
+    "authors": [
+        {
+            "name": "Snakevil Zen",
+            "email": "zsnakevil@gmail.com",
+            "role": "Leader"
+        }
+    ],
+    "require": {
+        "zen/core": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zen\\Model\\": "lib/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZenTest\\Model\\": "share/test/"
+        }
+    },
+    "archive": {
+        "exclude": [
+            "/share"
+        ]
+    }
+}
