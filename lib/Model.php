@@ -110,7 +110,7 @@ abstract class Model extends Core\Component implements IModel
      */
     final public function __toString()
     {
-        return get_class($this) . '(' . (isset($this->staging['id']) ? $this->staging['id'] : '*') . ')';
+        return @$this->staging['id'];
     }
 
     /**
@@ -120,17 +120,6 @@ abstract class Model extends Core\Component implements IModel
      * @return self
      */
     final public static function create($attributes)
-    {
-        return static::prepare($attributes)->save();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param  scalar[] $attributes 可选。
-     * @return self
-     */
-    final public static function prepare($attributes = array())
     {
         $s_class = get_called_class();
         if (!is_array(self::$zenEntities)) {
@@ -150,7 +139,7 @@ abstract class Model extends Core\Component implements IModel
             }
         }
 
-        return $o_entity;
+        return $o_entity->save();
     }
 
     /**
@@ -357,12 +346,15 @@ abstract class Model extends Core\Component implements IModel
         if (!isset($this->staging['id'])) {
             return;
         }
-        $a_stage = $this->staging;
+        $s_id = $this->staging['id'];
         $this->onDestroy();
+        foreach ($this->staging as $ii => $jj) {
+            $this->$ii = null;
+        }
         $this->staging = array();
         $this->dao = $this->newDummyDao();
         $s_class = get_class($this);
-        unset(self::$zenEntities[$s_class][$a_stage['id']]);
+        unset(self::$zenEntities[$s_class][$s_id]);
     }
 
     /**

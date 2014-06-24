@@ -36,14 +36,6 @@ interface IModel extends ArrayAccess
     public static function create($attributes);
 
     /**
-     * 准备实体以创建。
-     *
-     * @param  scalar[] $attributes 可选。
-     * @return self
-     */
-    public static function prepare($attributes = array());
-
-    /**
      * 加载相应的实体（模型组件实例）。
      *
      * @param  scalar $id 编号
