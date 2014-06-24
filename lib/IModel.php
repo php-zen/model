@@ -21,6 +21,13 @@ use ArrayAccess;
 interface IModel extends ArrayAccess
 {
     /**
+     * 获取摘要描述。
+     *
+     * @return string
+     */
+    public function __toString();
+
+    /**
      * 创建实体及其持久化数据。
      *
      * @param  scalar[] $attributes 属性集合

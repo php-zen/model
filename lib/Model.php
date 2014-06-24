@@ -106,6 +106,16 @@ abstract class Model extends Core\Component implements IModel
     /**
      * {@inheritdoc}
      *
+     * @return string
+     */
+    final public function __toString()
+    {
+        return get_class($this) . '(' . (isset($this->staging['id']) ? $this->staging['id'] : '*') . ')';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * @param  scalar[] $attributes 属性集合
      * @return self
      */
@@ -237,6 +247,8 @@ abstract class Model extends Core\Component implements IModel
      *
      * @param  mixed[] $attributes 属性集合
      * @return self
+     *
+     * @throws ExAttributeMissing 当属性缺失时
      */
     final public function reload($attributes)
     {
