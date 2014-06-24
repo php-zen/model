@@ -91,7 +91,7 @@ interface ISet extends Countable, Iterator
      * @param  string $value     期望值
      * @return self
      */
-    public function filterEqual($attribute, $value);
+    public function filterEq($attribute, $value);
 
     /**
      * 过滤保留属性值在预期值集合内地实体。
@@ -109,7 +109,7 @@ interface ISet extends Countable, Iterator
      * @param  number $value     期望值
      * @return self
      */
-    public function filterGeater($attribute, $value);
+    public function filterGt($attribute, $value);
 
     /**
      * 过滤保留属性值小于预期值地实体。
@@ -118,7 +118,7 @@ interface ISet extends Countable, Iterator
      * @param  number $value     期望值
      * @return self
      */
-    public function filterLesser($attribute, $value);
+    public function filterLt($attribute, $value);
 
     /**
      * 过滤掉属性值等于预期值地实体。
@@ -127,7 +127,7 @@ interface ISet extends Countable, Iterator
      * @param  string $value     期望值
      * @return self
      */
-    public function excludeEqual($attribute, $value);
+    public function excludeEq($attribute, $value);
 
     /**
      * 过滤掉属性值在预期值集合内地实体。
@@ -145,7 +145,7 @@ interface ISet extends Countable, Iterator
      * @param  number $value     期望值
      * @return self
      */
-    public function excludeGeater($attribute, $value);
+    public function excludeGt($attribute, $value);
 
     /**
      * 过滤掉属性值小于预期值地实体。
@@ -154,7 +154,7 @@ interface ISet extends Countable, Iterator
      * @param  number $value     期望值
      * @return self
      */
-    public function excludeLesser($attribute, $value);
+    public function excludeLt($attribute, $value);
 
     /**
      * 按指定位置截取实体集合。

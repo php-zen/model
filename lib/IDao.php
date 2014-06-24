@@ -57,9 +57,11 @@ interface IDao extends Core\ISingleton
      * 统计符合条件地实体记录数量。
      *
      * @param  array[] $conditions 条件
+     * @param  int     $limit      可选。集合大小限制
+     * @param  int     $offset     可选。集合起始偏移量
      * @return int
      */
-    public function count($conditions);
+    public function count($conditions, $limit = 0, $offset = 0);
 
     /**
      * 获取符合条件地实体记录集合。

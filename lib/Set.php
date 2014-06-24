@@ -241,7 +241,7 @@ abstract class Set extends Core\Component implements ISet
      * @param  string $value     期望值
      * @return self
      */
-    final public function filterEqual($attribute, $value)
+    final public function filterEq($attribute, $value)
     {
         return $this->filter($attribute, $value, self::OP_EQ);
     }
@@ -255,6 +255,10 @@ abstract class Set extends Core\Component implements ISet
      */
     final public function filterIn($attribute, $value)
     {
+        if (!is_array($value)) {
+            $value = array($value);
+        }
+
         return $this->filter($attribute, $value, self::OP_IN);
     }
 
@@ -265,7 +269,7 @@ abstract class Set extends Core\Component implements ISet
      * @param  number $value     期望值
      * @return self
      */
-    final public function filterGeater($attribute, $value)
+    final public function filterGt($attribute, $value)
     {
         return $this->filter($attribute, $value, self::OP_GT);
     }
@@ -277,7 +281,7 @@ abstract class Set extends Core\Component implements ISet
      * @param  number $value     期望值
      * @return self
      */
-    final public function filterLesser($attribute, $value)
+    final public function filterLt($attribute, $value)
     {
         return $this->filter($attribute, $value, self::OP_LT);
     }
@@ -289,7 +293,7 @@ abstract class Set extends Core\Component implements ISet
      * @param  string $value     期望值
      * @return self
      */
-    final public function excludeEqual($attribute, $value)
+    final public function excludeEq($attribute, $value)
     {
         return $this->filter($attribute, $value, self::OP_NE);
     }
@@ -303,6 +307,10 @@ abstract class Set extends Core\Component implements ISet
      */
     final public function excludeIn($attribute, $value)
     {
+        if (!is_array($value)) {
+            $value = array($value);
+        }
+
         return $this->filter($attribute, $value, self::OP_NI);
     }
 
@@ -313,7 +321,7 @@ abstract class Set extends Core\Component implements ISet
      * @param  number $value     期望值
      * @return self
      */
-    final public function excludeGeater($attribute, $value)
+    final public function excludeGt($attribute, $value)
     {
         return $this->filter($attribute, $value, self::OP_LE);
     }
@@ -325,7 +333,7 @@ abstract class Set extends Core\Component implements ISet
      * @param  number $value     期望值
      * @return self
      */
-    final public function excludeLesser($attribute, $value)
+    final public function excludeLt($attribute, $value)
     {
         return $this->filter($attribute, $value, self::OP_GE);
     }
