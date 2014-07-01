@@ -78,6 +78,13 @@ interface ISet extends Countable, Iterator
     const OP_LE = '<=';
 
     /**
+     * 转化为数组。
+     *
+     * @return array[]
+     */
+    public function toArray();
+
+    /**
      * 创建映射全部实体以用于过滤地模型集合组件实例。
      *
      * @return self

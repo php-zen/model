@@ -171,6 +171,22 @@ abstract class Set extends Core\Component implements ISet
     /**
      * {@inheritdoc}
      *
+     * @return array[]
+     */
+    final public function toArray()
+    {
+        $this->valid();
+        $a_ret = array();
+        foreach ($this->items as $ii) {
+            $a_ret[] = $ii->toArray();
+        }
+
+        return $a_ret;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * @return self
      */
     final public static function all()

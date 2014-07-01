@@ -28,12 +28,27 @@ interface IModel extends ArrayAccess
     public function __toString();
 
     /**
+     * 转化为数组。
+     *
+     * @return mixed[]
+     */
+    public function toArray();
+
+    /**
      * 创建实体及其持久化数据。
      *
      * @param  scalar[] $attributes 属性集合
      * @return self
      */
     public static function create($attributes);
+
+    /**
+     * 准备实体以创建。
+     *
+     * @param  scalar[] $attributes 可选。
+     * @return self
+     */
+    public static function prepare($attributes = array());
 
     /**
      * 加载相应的实体（模型组件实例）。

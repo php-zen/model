@@ -116,6 +116,16 @@ abstract class Model extends Core\Component implements IModel
     /**
      * {@inheritdoc}
      *
+     * @return mixed[]
+     */
+    final public function toArray()
+    {
+        return $this->staging;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * @param  scalar[] $attributes 属性集合
      * @return self
      */
