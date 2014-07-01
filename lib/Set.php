@@ -165,7 +165,7 @@ abstract class Set extends Core\Component implements ISet
             $this->rewind();
         }
 
-        return 0 <= $this->cursor && $this->cursor <= $this->quantity;
+        return 0 <= $this->cursor && $this->cursor < $this->quantity;
     }
 
     /**
