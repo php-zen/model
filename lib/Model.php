@@ -147,6 +147,7 @@ abstract class Model extends Core\Component implements IModel
         }
         foreach ($attributes as $ii => $jj) {
             if (isset($a_attrs[$ii])) {
+                $o_entity->staging[$ii] = null;
                 $o_entity->$ii = $jj;
             }
         }
@@ -316,7 +317,7 @@ abstract class Model extends Core\Component implements IModel
         $a_diff = array();
         foreach ($a_stage as $ii => $jj) {
             if ($jj != (string) $this->$ii) {
-                $a_diff[$ii] = (string) $jj;
+                $a_diff[$ii] = (string) $this->$ii;
             }
         }
         if (empty($a_diff)) {
@@ -332,7 +333,7 @@ abstract class Model extends Core\Component implements IModel
             $this->staging = array_merge($a_stage, $a_diff);
         } else {
             $this->staging['id'] =
-            $this->id = $this->dao->create($a_stage);
+            $this->id = $this->dao->create($a_diff);
             self::$zenEntities[$s_class][$this->id] = $this;
         }
 
