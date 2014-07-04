@@ -17,6 +17,8 @@ use Zen\Core;
  * @package    Zen\Model
  * @version    0.1.0
  * @since      0.1.0
+ *
+ * @property-read scalar $id 编号
  */
 abstract class Model extends Core\Component implements IModel
 {
@@ -136,11 +138,11 @@ abstract class Model extends Core\Component implements IModel
             self::$zenEntities = array();
         }
         $o_entity = new static;
-        if (!self::$zenPropsTable[$s_class]) {
+        if (!isset(self::$zenPropsTable[$s_class])) {
             $o_entity->zenMeasureProperty('id');
         }
         $a_attrs = self::$zenPropsTable[$s_class];
-        foreach ($this->listNonAttributes() as $ii) {
+        foreach ($o_entity->listNonAttributes() as $ii) {
             unset($a_attrs[$ii]);
         }
         foreach ($attributes as $ii => $jj) {
