@@ -14,9 +14,9 @@ use Zen\Core;
 /**
  * 模型集合组件。
  *
- * @package    Zen\Model
- * @version    0.1.0
- * @since      0.1.0
+ * @package Zen\Model
+ * @version 0.1.0
+ * @since   0.1.0
  */
 abstract class Set extends Core\Component implements ISet
 {

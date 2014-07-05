@@ -14,9 +14,9 @@ use Zen\Core;
 /**
  * 模型的数据访问对象组件规范。
  *
- * @package    Zen\Model
- * @version    0.1.0
- * @since      0.1.0
+ * @package Zen\Model
+ * @version 0.1.0
+ * @since   0.1.0
  */
 interface IDao extends Core\ISingleton
 {

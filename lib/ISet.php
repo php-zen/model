@@ -15,9 +15,9 @@ use Iterator;
 /**
  * 模型集合组件规范。
  *
- * @package    Zen\Model
- * @version    0.1.0
- * @since      0.1.0
+ * @package Zen\Model
+ * @version 0.1.0
+ * @since   0.1.0
  */
 interface ISet extends Countable, Iterator
 {

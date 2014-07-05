@@ -14,9 +14,9 @@ use Zen\Core;
 /**
  * 模型组件。
  *
- * @package    Zen\Model
- * @version    0.1.0
- * @since      0.1.0
+ * @package Zen\Model
+ * @version 0.1.0
+ * @since   0.1.0
  *
  * @property-read scalar $id 编号
  */
@@ -49,7 +49,7 @@ abstract class Model extends Core\Component implements IModel
     {
         return array(
             'dao',
-            'staging'
+            'zenStaging'
         );
     }
 
@@ -112,7 +112,7 @@ abstract class Model extends Core\Component implements IModel
      */
     final public function __toString()
     {
-        return (string) @$this->staging['id'];
+        return (string) @$this->zenStaging['id'];
     }
 
     /**
@@ -122,7 +122,7 @@ abstract class Model extends Core\Component implements IModel
      */
     final public function toArray()
     {
-        return $this->staging;
+        return $this->zenStaging;
     }
 
     /**
@@ -147,7 +147,7 @@ abstract class Model extends Core\Component implements IModel
         }
         foreach ($attributes as $ii => $jj) {
             if (isset($a_attrs[$ii])) {
-                $o_entity->staging[$ii] = null;
+                $o_entity->zenStaging[$ii] = null;
                 $o_entity->$ii = $jj;
             }
         }
@@ -168,7 +168,7 @@ abstract class Model extends Core\Component implements IModel
     final protected function __construct()
     {
         $this->dao = $this->newDao();
-        $this->staging = array();
+        $this->zenStaging = array();
     }
 
     /**
@@ -192,7 +192,7 @@ abstract class Model extends Core\Component implements IModel
         }
         if (!isset(self::$zenEntities[$s_class][$id])) {
             $o_entity = new static;
-            $o_entity->staging['id'] = $id;
+            $o_entity->zenStaging['id'] = $id;
             $o_entity->reload($o_entity->dao->read($id));
             self::$zenEntities[$s_class][$id] = $o_entity;
         }
@@ -220,7 +220,7 @@ abstract class Model extends Core\Component implements IModel
         $s_id = $attributes['id'];
         if (!isset(self::$zenEntities[$s_class][$s_id])) {
             $o_entity = new static;
-            $o_entity->staging['id'] = $s_id;
+            $o_entity->zenStaging['id'] = $s_id;
             self::$zenEntities[$s_class][$s_id] = $o_entity;
         }
         self::$zenEntities[$s_class][$s_id]->reload($attributes);
@@ -240,7 +240,7 @@ abstract class Model extends Core\Component implements IModel
      *
      * @var scalar[]
      */
-    protected $staging;
+    protected $zenStaging;
 
     /**
      * {@inheritdoc}
@@ -255,8 +255,8 @@ abstract class Model extends Core\Component implements IModel
     final public function reload($attributes)
     {
         if (is_array($attributes) &&
-            isset($this->staging['id'], $attributes['id']) &&
-            $this->staging['id'] == $attributes['id']
+            isset($this->zenStaging['id'], $attributes['id']) &&
+            $this->zenStaging['id'] == $attributes['id']
         ) {
             $s_class = get_class($this);
             if (!isset(self::$zenPropsTable[$s_class])) {
@@ -285,7 +285,7 @@ abstract class Model extends Core\Component implements IModel
             if (!empty($a_attrs)) {
                 throw new ExAttributeMissing($this, array_shift(array_keys($a_attrs)));
             }
-            $this->staging = $a_stage;
+            $this->zenStaging = $a_stage;
             foreach ($a_stage as $ii => $jj) {
                 $this->$ii = $jj;
             }
@@ -312,7 +312,7 @@ abstract class Model extends Core\Component implements IModel
      */
     final public function save()
     {
-        $a_stage = $this->staging;
+        $a_stage = $this->zenStaging;
         $this->onSave();
         $a_diff = array();
         foreach ($a_stage as $ii => $jj) {
@@ -330,9 +330,9 @@ abstract class Model extends Core\Component implements IModel
                 unset(self::$zenEntities[$s_class][$a_stage['id']]);
                 self::$zenEntities[$s_class][$this->id] = $this;
             }
-            $this->staging = array_merge($a_stage, $a_diff);
+            $this->zenStaging = array_merge($a_stage, $a_diff);
         } else {
-            $this->staging['id'] =
+            $this->zenStaging['id'] =
             $this->id = $this->dao->create($a_diff);
             self::$zenEntities[$s_class][$this->id] = $this;
         }
@@ -356,15 +356,15 @@ abstract class Model extends Core\Component implements IModel
      */
     final public function destroy()
     {
-        if (!isset($this->staging['id'])) {
+        if (!isset($this->zenStaging['id'])) {
             return;
         }
-        $s_id = $this->staging['id'];
+        $s_id = $this->zenStaging['id'];
         $this->onDestroy();
-        foreach ($this->staging as $ii => $jj) {
+        foreach ($this->zenStaging as $ii => $jj) {
             $this->$ii = null;
         }
-        $this->staging = array();
+        $this->zenStaging = array();
         $this->dao = $this->newDummyDao();
         $s_class = get_class($this);
         unset(self::$zenEntities[$s_class][$s_id]);
@@ -377,7 +377,7 @@ abstract class Model extends Core\Component implements IModel
      */
     protected function onDestroy()
     {
-        $this->dao->delete($this->staging['id']);
+        $this->dao->delete($this->zenStaging['id']);
     }
 
     /**
@@ -423,5 +423,47 @@ abstract class Model extends Core\Component implements IModel
             case ISet::OP_LE:
                 return $m_value <= $value;
         }
+    }
+
+    /**
+     * 验证器集合。
+     *
+     * @internal
+     *
+     * @var array[]
+     */
+    protected static $zenValidators = array();
+
+    /**
+     * 初始化验证器事件。
+     *
+     * @return IValidator[]
+     */
+    protected function onInitValidators()
+    {
+        return array();
+    }
+
+    /**
+     * 验证给定值是否符合属性要求。
+     *
+     * @param  string $property 属性名
+     * @param  mixed  $value    待设置地值
+     * @return bool
+     */
+    final protected function validate($property, $value)
+    {
+        $s_class = get_class($this);
+        if (!isset(self::$zenValidators[$s_class])) {
+            self::$zenValidators[$s_class] = $this->onInitValidators();
+        }
+        if (!isset(self::$zenValidators[$s_class][$property])) {
+            return true;
+        }
+        if (!self::$zenValidators[$s_class][$property] instanceof IValidator) {
+            return false;
+        }
+
+        return self::$zenValidators[$s_class][$property]->verify($value);
     }
 }
