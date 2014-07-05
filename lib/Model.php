@@ -112,7 +112,7 @@ abstract class Model extends Core\Component implements IModel
      */
     final public function __toString()
     {
-        return @$this->staging['id'];
+        return (string) @$this->staging['id'];
     }
 
     /**

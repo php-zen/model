@@ -67,9 +67,10 @@ interface IDao extends Core\ISingleton
      * 获取符合条件地实体记录集合。
      *
      * @param  array[] $conditions 条件
+     * @param  array[] $oders      可选。排序方案
      * @param  int     $limit      可选。集合大小限制
      * @param  int     $offset     可选。集合起始偏移量
      * @return array[]
      */
-    public function query($conditions, $limit = 0, $offset = 0);
+    public function query($conditions, $orders = array(), $limit = 0, $offset = 0);
 }
