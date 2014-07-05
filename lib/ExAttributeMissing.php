@@ -12,10 +12,9 @@ namespace Zen\Model;
 /**
  * 当属性缺失时抛出地异常。
  *
- * @package    Zen\Core
- * @subpackage Application
- * @version    0.1.0
- * @since      0.1.0
+ * @package Zen\Model
+ * @version 0.1.0
+ * @since   0.1.0
  *
  * @method void __construct(IModel $entity, string $attribute, \Exception $prev = null) 构造函数
  */
