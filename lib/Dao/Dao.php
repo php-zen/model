@@ -83,7 +83,9 @@ abstract class Dao extends Core\Component implements Model\IDao
         for ($ii = 0, $jj = count($records); $ii < $jj; $ii++) {
             $a_tmp = array();
             foreach ($records[$ii] as $kk => $ll) {
-                $a_tmp[static::$map[$kk]] = $ll;
+                if (isset(static::$map[$kk])) {
+                    $a_tmp[static::$map[$kk]] = $ll;
+                }
             }
             $a_ret[] = $a_tmp;
         }
@@ -112,7 +114,9 @@ abstract class Dao extends Core\Component implements Model\IDao
         for ($ii = 0, $jj = count($entities); $ii < $jj; $ii++) {
             $a_tmp = array();
             foreach ($entities[$ii] as $kk => $ll) {
-                $a_tmp[$a_map[$kk]] = $ll;
+                if (isset($a_map[$kk])) {
+                    $a_tmp[$a_map[$kk]] = $ll;
+                }
             }
             $a_ret[] = $a_tmp;
         }

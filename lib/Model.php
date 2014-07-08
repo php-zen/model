@@ -334,6 +334,7 @@ abstract class Model extends Core\Component implements IModel
         } else {
             $this->zenStaging['id'] =
             $this->id = $this->dao->create($a_diff);
+            $this->reload($this->dao->read($this->id));
             self::$zenEntities[$s_class][$this->id] = $this;
         }
 
