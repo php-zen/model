@@ -65,7 +65,7 @@ class SizedChars extends Core\Component implements Model\IValidator
      */
     public function verify($value)
     {
-        $i_len = mb_strlen($value);
+        $i_len = mb_strlen($value, 'UTF-8');
         if ($i_len < $this->minLength) {
             throw new ExSizedCharsTooShort($value, $this->minLength);
         }
