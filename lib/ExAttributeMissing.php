@@ -34,5 +34,5 @@ final class ExAttributeMissing extends Exception
      *
      * @var string[]
      */
-    protected static $contextSequence = array('entity', 'attribtue');
+    protected static $contextSequence = array('entity', 'attribute');
 }

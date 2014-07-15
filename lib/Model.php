@@ -283,7 +283,8 @@ abstract class Model extends Core\Component implements IModel
                 }
             }
             if (!empty($a_attrs)) {
-                throw new ExAttributeMissing($this, array_shift(array_keys($a_attrs)));
+                $a_attrs = array_keys($a_attrs);
+                throw new ExAttributeMissing($this, $a_attrs[0]);
             }
             $this->zenStaging = $a_stage;
             foreach ($a_stage as $ii => $jj) {
