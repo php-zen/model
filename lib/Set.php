@@ -115,6 +115,15 @@ abstract class Set extends Core\Component implements ISet
     protected $conditions;
 
     /**
+     * 排序条件集。
+     *
+     * @internal
+     *
+     * @var array[]
+     */
+    protected $orders;
+
+    /**
      * 截取起始位置。
      *
      * @internal
@@ -141,7 +150,7 @@ abstract class Set extends Core\Component implements ISet
     {
         if (-1 == $this->cursor) {
             $c_new = array(static::MODEL_CLASS, 'loadFromAttributes');
-            foreach ($this->dao->query($this->conditions, $this->limit, $this->offset) as $ii) {
+            foreach ($this->dao->query($this->conditions, $this->orders, $this->limit, $this->offset) as $ii) {
                 $this->items[] = call_user_func($c_new, $ii);
             }
             if (-1 == $this->quantity) {
@@ -203,6 +212,7 @@ abstract class Set extends Core\Component implements ISet
         $this->quantity =
         $this->cursor = -1;
         $this->conditions = array();
+        $this->orders = array();
         $this->limit =
         $this->offset = 0;
         $this->dao = $this->newDao();
@@ -352,6 +362,20 @@ abstract class Set extends Core\Component implements ISet
     final public function excludeLt($attribute, $value)
     {
         return $this->filter($attribute, $value, self::OP_GE);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  string $attribute 属性名
+     * @param  bool   $ascading  可选。是否正向排序
+     * @return self
+     */
+    final public function sortBy($attribute, $ascading = true)
+    {
+        $this->orders[$attribute] = $ascading;
+
+        return $this;
     }
 
     /**

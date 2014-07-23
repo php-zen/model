@@ -22,6 +22,20 @@ use Iterator;
 interface ISet extends Countable, Iterator
 {
     /**
+     * 转化为数组。
+     *
+     * @return array[]
+     */
+    public function toArray();
+
+    /**
+     * 创建映射全部实体以用于过滤地模型集合组件实例。
+     *
+     * @return self
+     */
+    public static function all();
+
+    /**
      * 等于运算符。
      *
      * @var string
@@ -76,20 +90,6 @@ interface ISet extends Countable, Iterator
      * @var string
      */
     const OP_LE = '<=';
-
-    /**
-     * 转化为数组。
-     *
-     * @return array[]
-     */
-    public function toArray();
-
-    /**
-     * 创建映射全部实体以用于过滤地模型集合组件实例。
-     *
-     * @return self
-     */
-    public static function all();
 
     /**
      * 过滤保留属性值等于预期值地实体。
@@ -162,6 +162,29 @@ interface ISet extends Countable, Iterator
      * @return self
      */
     public function excludeLt($attribute, $value);
+
+    /**
+     * 正向排序。
+     *
+     * @var bool
+     */
+    const SORT_ASC = true;
+
+    /**
+     * 逆向排序。
+     *
+     * @var bool
+     */
+    const SORT_DESC = false;
+
+    /**
+     * 按照指定属性值排序。
+     *
+     * @param  string $attribute 属性名
+     * @param  bool   $ascading  可选。是否正向排序
+     * @return self
+     */
+    public function sortBy($attribute, $ascading = true);
 
     /**
      * 按指定位置截取实体集合。
