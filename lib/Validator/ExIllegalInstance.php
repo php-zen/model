@@ -17,7 +17,7 @@ namespace Zen\Model\Validator;
  * @version    0.1.0
  * @since      0.1.0
  *
- * @method void __construct(mixed $value, string $class, \Exception $prev = null) 构造函数
+ * @method void __construct(string $attribute, mixed $value, string $class, \Exception $prev = null) 构造函数
  */
 final class ExIllegalInstance extends Exception
 {
@@ -35,5 +35,5 @@ final class ExIllegalInstance extends Exception
      *
      * @var string[]
      */
-    protected static $contextSequence = array('value', 'class');
+    protected static $contextSequence = array('attribute', 'value', 'class');
 }

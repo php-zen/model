@@ -9,7 +9,6 @@
 
 namespace Zen\Model\Validator;
 
-use Zen\Core;
 use Zen\Model;
 
 /**
@@ -20,7 +19,7 @@ use Zen\Model;
  * @version    0.1.0
  * @since      0.1.0
  */
-class Enumeration extends Core\Component implements Model\IValidator
+class Enumeration extends Validator
 {
     /**
      * 枚举值集合。
@@ -32,11 +31,14 @@ class Enumeration extends Core\Component implements Model\IValidator
     /**
      * 构造函数
      *
-     * @param scalar $... 枚举值
+     * @param string $attribute 属性名
+     * @param scalar $...       枚举值
      */
-    public function __construct()
+    public function __construct($attribute)
     {
-        $this->items = func_get_args();
+        $a_args = func_get_args();
+        parent::__construct(array_shift($a_args));
+        $this->items = a_args();
     }
 
     /**
@@ -50,7 +52,7 @@ class Enumeration extends Core\Component implements Model\IValidator
     public function verify($value)
     {
         if (!in_array($value, $this->items)) {
-            throw new ExIllegalEnumItem($value);
+            throw new ExIllegalEnumItem($this->attribute, $value);
         }
 
         return true;

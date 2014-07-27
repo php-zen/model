@@ -9,7 +9,6 @@
 
 namespace Zen\Model\Validator;
 
-use Zen\Core;
 use Zen\Model;
 
 /**
@@ -20,7 +19,7 @@ use Zen\Model;
  * @version    0.1.0
  * @since      0.1.0
  */
-class SizedChars extends Core\Component implements Model\IValidator
+class SizedChars extends Validator
 {
     /**
      * 最小长度。
@@ -43,11 +42,13 @@ class SizedChars extends Core\Component implements Model\IValidator
     /**
      * 构造函数
      *
-     * @param int $minLength 最小长度要求
-     * @param int $maxLength 最大长度要求
+     * @param string $attribute 属性名
+     * @param int    $minLength 最小长度要求
+     * @param int    $maxLength 最大长度要求
      */
-    public function __construct($minLength, $maxLength = 0)
+    public function __construct($attribute, $minLength, $maxLength = 0)
     {
+        parent::__construct($attribute);
         $this->minLength = max(0, $minLength);
         $this->maxLength = 0 < $maxLength
             ? max($this->minLength, $maxLength)
@@ -67,10 +68,10 @@ class SizedChars extends Core\Component implements Model\IValidator
     {
         $i_len = mb_strlen($value, 'UTF-8');
         if ($i_len < $this->minLength) {
-            throw new ExSizedCharsTooShort($value, $this->minLength);
+            throw new ExSizedCharsTooShort($this->attribute, $value, $this->minLength);
         }
         if ($this->maxLength && $i_len > $this->maxLength) {
-            throw new ExSizedCharsTooLong($value, $this->maxLength);
+            throw new ExSizedCharsTooLong($this->attribute, $value, $this->maxLength);
         }
 
         return true;

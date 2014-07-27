@@ -31,7 +31,7 @@ class RangedInt extends RangedNumber
     {
         $i_value = (int) $value;
         if ($i_value != $value) {
-            throw new ExValueNotInt($value);
+            throw new ExValueNotInt($this->attribute, $value);
         }
 
         return parent::verify($value);

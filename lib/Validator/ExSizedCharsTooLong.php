@@ -17,7 +17,7 @@ namespace Zen\Model\Validator;
  * @version    0.1.0
  * @since      0.1.0
  *
- * @method void __construct(string $value, int $length, \Exception $prev = null) 构造函数
+ * @method void __construct(string $attribute, string $value, int $length, \Exception $prev = null) 构造函数
  */
 final class ExSizedCharsTooLong extends Exception
 {
@@ -35,5 +35,5 @@ final class ExSizedCharsTooLong extends Exception
      *
      * @var string[]
      */
-    protected static $contextSequence = array('value', 'length');
+    protected static $contextSequence = array('attribute', 'value', 'length');
 }

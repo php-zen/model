@@ -17,7 +17,7 @@ namespace Zen\Model\Validator;
  * @version    0.1.0
  * @since      0.1.0
  *
- * @method void __construct(string $value, string $pattern, \Exception $prev = null) 构造函数
+ * @method void __construct(string $attribute, string $value, string $pattern, \Exception $prev = null) 构造函数
  */
 final class ExPatternDismatched extends Exception
 {
@@ -35,5 +35,5 @@ final class ExPatternDismatched extends Exception
      *
      * @var string[]
      */
-    protected static $contextSequence = array('value', 'pattern');
+    protected static $contextSequence = array('attribute', 'value', 'pattern');
 }

@@ -9,7 +9,6 @@
 
 namespace Zen\Model\Validator;
 
-use Zen\Core;
 use Zen\Model;
 
 /**
@@ -20,7 +19,7 @@ use Zen\Model;
  * @version    0.1.0
  * @since      0.1.0
  */
-class Instance extends Core\Component implements Model\IValidator
+class Instance extends Validator
 {
     /**
      * 类实例集合。
@@ -32,10 +31,12 @@ class Instance extends Core\Component implements Model\IValidator
     /**
      * 构造函数
      *
-     * @param string $class 类名
+     * @param string $attribute 属性名
+     * @param string $class     类名
      */
-    public function __construct($class)
+    public function __construct($attribute, $class)
     {
+        parent::__construct($attribute);
         $this->prototype = $class;
     }
 
@@ -50,7 +51,7 @@ class Instance extends Core\Component implements Model\IValidator
     public function verify($value)
     {
         if (!is_a($value, $this->prototype)) {
-            throw new ExIllegalInstance($value, $this->prototype);
+            throw new ExIllegalInstance($this->attribute, $value, $this->prototype);
         }
 
         return true;

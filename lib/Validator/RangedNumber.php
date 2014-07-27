@@ -9,7 +9,6 @@
 
 namespace Zen\Model\Validator;
 
-use Zen\Core;
 use Zen\Model;
 
 /**
@@ -20,7 +19,7 @@ use Zen\Model;
  * @version    0.1.0
  * @since      0.1.0
  */
-class RangedNumber extends Core\Component implements Model\IValidator
+class RangedNumber extends Validator
 {
     /**
      * 最小值。
@@ -43,11 +42,13 @@ class RangedNumber extends Core\Component implements Model\IValidator
     /**
      * 构造函数
      *
-     * @param int $minValue 最小值要求
-     * @param int $maxValue 最大值要求
+     * @param string $attribute 属性名
+     * @param int    $minValue  最小值要求
+     * @param int    $maxValue  最大值要求
      */
-    public function __construct($minValue, $maxValue = 0)
+    public function __construct($attribute, $minValue, $maxValue = 0)
     {
+        parent::__construct($attribute);
         $this->minValue = (float) $minValue;
         $this->maxValue = 0 < $maxValue
             ? max($this->minValue, $maxValue)
@@ -67,10 +68,10 @@ class RangedNumber extends Core\Component implements Model\IValidator
     {
         $f_value = (float) $value;
         if ($f_value < $this->minValue) {
-            throw new ExRangedNumberTooSmall($value, $this->minValue);
+            throw new ExRangedNumberTooSmall($this->attribute, $value, $this->minValue);
         }
         if ($this->maxValue && $f_value > $this->maxValue) {
-            throw new ExRangedNumberTooLarge($value, $this->maxValue);
+            throw new ExRangedNumberTooLarge($this->attribute, $value, $this->maxValue);
         }
 
         return true;

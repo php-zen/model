@@ -17,7 +17,7 @@ namespace Zen\Model\Validator;
  * @version    0.1.0
  * @since      0.1.0
  *
- * @method void __construct(float $value, float $min, \Exception $prev = null) 构造函数
+ * @method void __construct(string $attribute, float $value, float $min, \Exception $prev = null) 构造函数
  */
 final class ExRangedNumberTooSmall extends Exception
 {
@@ -35,5 +35,5 @@ final class ExRangedNumberTooSmall extends Exception
      *
      * @var string[]
      */
-    protected static $contextSequence = array('value', 'min');
+    protected static $contextSequence = array('attribute', 'value', 'min');
 }

@@ -9,7 +9,6 @@
 
 namespace Zen\Model\Validator;
 
-use Zen\Core;
 use Zen\Model;
 
 /**
@@ -20,7 +19,7 @@ use Zen\Model;
  * @version    0.1.0
  * @since      0.1.0
  */
-class Pattern extends Core\Component implements Model\IValidator
+class Pattern extends Validator
 {
     /**
      * 模式（正则表达式）。
@@ -34,10 +33,12 @@ class Pattern extends Core\Component implements Model\IValidator
     /**
      * 构造函数
      *
-     * @param int $pattern 模式
+     * @param string $attribute 属性名
+     * @param int    $pattern   模式
      */
-    public function __construct($pattern)
+    public function __construct($attribute, $pattern)
     {
+        parent::__construct($attribute);
         $this->pattern = $pattern;
     }
 
@@ -52,7 +53,7 @@ class Pattern extends Core\Component implements Model\IValidator
     public function verify($value)
     {
         if (!preg_match($this->pattern, $value)) {
-            throw new ExPatternDismatched($value, $this->pattern);
+            throw new ExPatternDismatched($this->attribute, $value, $this->pattern);
         }
 
         return true;
