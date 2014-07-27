@@ -26,7 +26,7 @@ final class ExRangedNumberTooLarge extends Exception
      *
      * @var string
      */
-    protected static $template = '数值“%value$f”超出最大限度“%max$f”。';
+    protected static $template = '数值“%value$.1f”超出最大限度“%max$.1f”。';
 
     /**
      * {@inheritdoc}

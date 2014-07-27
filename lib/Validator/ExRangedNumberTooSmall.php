@@ -26,7 +26,7 @@ final class ExRangedNumberTooSmall extends Exception
      *
      * @var string
      */
-    protected static $template = '数值“%value$f”小于最小限度“%min$f”。';
+    protected static $template = '数值“%value$.1f”小于最小限度“%min$.1f”。';
 
     /**
      * {@inheritdoc}

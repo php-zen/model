@@ -38,7 +38,7 @@ class Enumeration extends Validator
     {
         $a_args = func_get_args();
         parent::__construct(array_shift($a_args));
-        $this->items = a_args();
+        $this->items = $a_args;
     }
 
     /**
