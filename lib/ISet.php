@@ -64,6 +64,13 @@ interface ISet extends Countable, Iterator
     const OP_LT = '<';
 
     /**
+     * 在区域内地运算符。
+     *
+     * @var string
+     */
+    const OP_BT = 'between';
+
+    /**
      * 不等于运算符。
      *
      * @var string
@@ -90,6 +97,13 @@ interface ISet extends Countable, Iterator
      * @var string
      */
     const OP_LE = '<=';
+
+    /**
+     * 不在区域内地运算符。
+     *
+     * @var string
+     */
+    const OP_NB = 'not between';
 
     /**
      * 过滤保留属性值等于预期值地实体。
@@ -128,6 +142,16 @@ interface ISet extends Countable, Iterator
     public function filterLt($attribute, $value);
 
     /**
+     * 过滤保留属性值在区域内地实体。
+     *
+     * @param  string $attribute 属性名
+     * @param  number $min       最小值
+     * @param  number $max       最大值
+     * @return self
+     */
+    public function filterBetween($attribute, $min, $max);
+
+    /**
      * 过滤掉属性值等于预期值地实体。
      *
      * @param  string $attribute 属性名
@@ -162,6 +186,16 @@ interface ISet extends Countable, Iterator
      * @return self
      */
     public function excludeLt($attribute, $value);
+
+    /**
+     * 过滤掉属性值在区域内地实体。
+     *
+     * @param  string $attribute 属性名
+     * @param  number $min       最小值
+     * @param  number $max       最大值
+     * @return self
+     */
+    public function excludeBetween($attribute, $min, $max);
 
     /**
      * 正向排序。

@@ -416,6 +416,8 @@ abstract class Model extends Core\Component implements IModel
                 return $m_value > $value;
             case ISet::OP_LT:
                 return $m_value < $value;
+            case ISet::OP_BT:
+                return $m_value > $value[0] && $m_value < $value[1];
             case ISet::OP_NE:
                 return $m_value != $value;
             case ISet::OP_NI:
@@ -424,7 +426,11 @@ abstract class Model extends Core\Component implements IModel
                 return $m_value >= $value;
             case ISet::OP_LE:
                 return $m_value <= $value;
+            case ISet::OP_NB:
+                return $m_value <= $value[0] || $m_value >= $value[1];
         }
+
+        return false;
     }
 
     /**

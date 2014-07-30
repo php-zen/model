@@ -316,6 +316,19 @@ abstract class Set extends Core\Component implements ISet
      * {@inheritdoc}
      *
      * @param  string $attribute 属性名
+     * @param  number $min       最小值
+     * @param  number $max       最大值
+     * @return self
+     */
+    public function filterBetween($attribute, $min, $max)
+    {
+        return $this->filter($attribute, array($min, $max), self::OP_BT);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  string $attribute 属性名
      * @param  string $value     期望值
      * @return self
      */
@@ -362,6 +375,19 @@ abstract class Set extends Core\Component implements ISet
     final public function excludeLt($attribute, $value)
     {
         return $this->filter($attribute, $value, self::OP_GE);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  string $attribute 属性名
+     * @param  number $min       最小值
+     * @param  number $max       最大值
+     * @return self
+     */
+    public function excludeBetween($attribute, $min, $max)
+    {
+        return $this->filter($attribute, array($min, $max), self::OP_NB);
     }
 
     /**

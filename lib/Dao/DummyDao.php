@@ -68,9 +68,12 @@ final class DummyDao extends Dao
      * {@inheritdoc}
      *
      * @param  array[] $conditions 条件
+     * @param  array[] $oders      可选。排序方案
+     * @param  int     $limit      可选。集合大小限制
+     * @param  int     $offset     可选。集合起始偏移量
      * @return int
      */
-    public function count($conditions)
+    public function count($conditions, $limit = 0, $offset = 0)
     {
         return 0;
     }
@@ -83,7 +86,7 @@ final class DummyDao extends Dao
      * @param  int     $offset     可选。集合起始偏移量
      * @return array[]
      */
-    public function query($conditions, $limit = 0, $offset = 0)
+    public function query($conditions, $orders = array(), $limit = 0, $offset = 0)
     {
         return array();
     }
