@@ -32,25 +32,20 @@ abstract class Model extends Core\Component implements IModel
      */
     final public function offsetExists($offset)
     {
-        if (in_array($offset, $this->listNonAttributes())) {
-            return false;
-        }
-        $s_class = get_class($this);
-
-        return isset(self::$zenPropsTable[$s_class][$offset]);
+        return $this->__isset($offset);
     }
 
     /**
-     * 列举类功能性属性（非实体持久化属性）。
+     * {@inheritdoc}
      *
-     * @return string[]
+     * @internal
+     *
+     * @param  scalar $property
+     * @return bool
      */
-    protected function listNonAttributes()
+    protected function zenIsset($property)
     {
-        return array(
-            'dao',
-            'zenStaging'
-        );
+        return !in_array($property, $this->listNonAttributes());
     }
 
     /**
@@ -63,9 +58,7 @@ abstract class Model extends Core\Component implements IModel
      */
     final public function offsetGet($offset)
     {
-        if ($this->offsetExists($offset)) {
-            return $this->__get($offset);
-        }
+        return $this->__get($offset);
     }
 
     /**
@@ -79,9 +72,7 @@ abstract class Model extends Core\Component implements IModel
      */
     final public function offsetSet($offset, $value)
     {
-        if ($this->offsetExists($offset)) {
-            $this->__set($offset, $value);
-        }
+        $this->__set($offset, $value);
     }
 
     /**
@@ -94,6 +85,20 @@ abstract class Model extends Core\Component implements IModel
      */
     final public function offsetUnset($offset)
     {
+        $this->__unset($offset);
+    }
+
+    /**
+     * 列举类功能性属性（非实体持久化属性）。
+     *
+     * @return string[]
+     */
+    protected function listNonAttributes()
+    {
+        return array(
+            'dao',
+            'zenStaging'
+        );
     }
 
     /**
@@ -138,10 +143,7 @@ abstract class Model extends Core\Component implements IModel
             self::$zenEntities = array();
         }
         $o_entity = new static;
-        if (!isset(self::$zenPropsTable[$s_class])) {
-            $o_entity->zenMeasureProperty('id');
-        }
-        $a_attrs = self::$zenPropsTable[$s_class];
+        $a_attrs = get_object_vars($o_entity);
         foreach ($o_entity->listNonAttributes() as $ii) {
             unset($a_attrs[$ii]);
         }
@@ -258,11 +260,7 @@ abstract class Model extends Core\Component implements IModel
             isset($this->zenStaging['id'], $attributes['id']) &&
             $this->zenStaging['id'] == $attributes['id']
         ) {
-            $s_class = get_class($this);
-            if (!isset(self::$zenPropsTable[$s_class])) {
-                $this->zenMeasureProperty('id');
-            }
-            $a_attrs = self::$zenPropsTable[$s_class];
+            $a_attrs = get_object_vars($this);
             foreach ($this->listNonAttributes() as $ii) {
                 unset($a_attrs[$ii]);
             }
