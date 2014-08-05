@@ -148,7 +148,7 @@ abstract class Model extends Core\Component implements IModel
             unset($a_attrs[$ii]);
         }
         foreach ($attributes as $ii => $jj) {
-            if (isset($a_attrs[$ii])) {
+            if (array_key_exists($ii, $a_attrs)) {
                 $o_entity->zenStaging[$ii] = null;
                 $o_entity->$ii = $jj;
             }
