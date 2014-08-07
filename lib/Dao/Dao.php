@@ -73,6 +73,9 @@ abstract class Dao extends Core\Component implements Model\IDao
      */
     final protected function map($records)
     {
+        if (empty($records)) {
+            return $records;
+        }
         if (isset($records[0])) {
             $b_multi = true;
         } else {
@@ -103,6 +106,9 @@ abstract class Dao extends Core\Component implements Model\IDao
      */
     final protected function reverseMap($entities)
     {
+        if (empty($entities)) {
+            return $entities;
+        }
         $a_map = array_flip(static::$map);
         if (isset($entities[0])) {
             $b_multi = true;
@@ -124,5 +130,72 @@ abstract class Dao extends Core\Component implements Model\IDao
         return $b_multi
             ? $a_ret
             : $a_ret[0];
+    }
+
+    /**
+     * 字符串类型。
+     *
+     * @var string
+     */
+    const TYPE_STRING = 'string';
+
+    /**
+     * 整数类型。
+     *
+     * @var string
+     */
+    const TYPE_INT = 'int';
+
+    /**
+     * 浮点数类型。
+     *
+     * @var string
+     */
+    const TYPE_FLOAT = 'float';
+
+    /**
+     * 布尔值类型。
+     *
+     * @var string
+     */
+    const TYPE_BOOL = 'bool';
+
+    /**
+     * 实体属性值类型表。
+     *
+     * @var string[]
+     */
+    protected static $types = array(
+        'id' => self::TYPE_INT
+    );
+
+    /**
+     * 将实体属性值转化为预期类型。
+     *
+     * @param  mixed[] $entities 单个或多个实体
+     * @return mixed[]
+     */
+    final protected function cast($entities)
+    {
+        if (empty($entities)) {
+            return $entities;
+        }
+        if (isset($entities[0])) {
+            $b_multi = true;
+        } else {
+            $b_multi = false;
+            $entities = array($entities);
+        }
+        for ($ii = 0, $jj = count($entities); $ii < $jj; $ii++) {
+            foreach (static::$types as $kk => $ll) {
+                $mm = $entities[$ii][$kk];
+                settype($mm, $ll);
+                $entities[$ii][$kk] = $mm;
+            }
+        }
+
+        return $b_multi
+            ? $entities
+            : $entities[0];
     }
 }
