@@ -51,7 +51,7 @@ abstract class Set extends Core\Component implements ISet
     final public function count()
     {
         if (-1 == $this->quantity) {
-            $this->quantity = $this->dao->count($this->conditions);
+            $this->quantity = $this->dao->count($this->conditions, $this->limit, $this->offset);
         }
 
         return $this->quantity;
@@ -407,11 +407,11 @@ abstract class Set extends Core\Component implements ISet
     /**
      * {@inheritdoc}
      *
-     * @param  int  $offset 起始位置
      * @param  int  $size   数量限制
+     * @param  int  $offset 可选。起始位置
      * @return self
      */
-    final public function crop($offset, $size)
+    final public function crop($size, $offset = 0)
     {
         if (-1 == $this->cursor) {
             if ($this->offset || $this->limit) {
@@ -419,6 +419,7 @@ abstract class Set extends Core\Component implements ISet
             } else {
                 $this->offset = $offset;
                 $this->limit = $size;
+                $this->quantity = -1;
 
                 return $this;
             }
