@@ -329,6 +329,18 @@ abstract class Set extends Core\Component implements ISet
      * {@inheritdoc}
      *
      * @param  string $attribute 属性名
+     * @param  string $pattern   模式
+     * @return self
+     */
+    public function filterLike($attribute, $pattern)
+    {
+        return $this->filter($attribute, $pattern, self::OP_LK);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  string $attribute 属性名
      * @param  string $value     期望值
      * @return self
      */
@@ -388,6 +400,18 @@ abstract class Set extends Core\Component implements ISet
     public function excludeBetween($attribute, $min, $max)
     {
         return $this->filter($attribute, array($min, $max), self::OP_NB);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  string $attribute 属性名
+     * @param  string $pattern   模式
+     * @return self
+     */
+    public function excludeLike($attribute, $pattern)
+    {
+        return $this->filter($attribute, $pattern, self::OP_NL);
     }
 
     /**

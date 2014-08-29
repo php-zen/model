@@ -47,7 +47,7 @@ interface ISet extends Countable, Iterator
      *
      * @var string
      */
-    const OP_IN = 'in';
+    const OP_IN = 'IN';
 
     /**
      * 大于运算符。
@@ -68,7 +68,14 @@ interface ISet extends Countable, Iterator
      *
      * @var string
      */
-    const OP_BT = 'between';
+    const OP_BT = 'BETWEEN';
+
+    /**
+     * 模式匹配运算符。
+     *
+     * @var string
+     */
+    const OP_LK = 'LIKE';
 
     /**
      * 不等于运算符。
@@ -82,7 +89,7 @@ interface ISet extends Countable, Iterator
      *
      * @var string
      */
-    const OP_NI = 'not in';
+    const OP_NI = 'NOT IN';
 
     /**
      * 大于或等于运算符。
@@ -103,7 +110,14 @@ interface ISet extends Countable, Iterator
      *
      * @var string
      */
-    const OP_NB = 'not between';
+    const OP_NB = 'NOT BETWEEN';
+
+    /**
+     * 模式异相匹配运算符。
+     *
+     * @var string
+     */
+    const OP_NL = 'NOT LIKE';
 
     /**
      * 过滤保留属性值等于预期值地实体。
@@ -152,6 +166,17 @@ interface ISet extends Countable, Iterator
     public function filterBetween($attribute, $min, $max);
 
     /**
+     * 过滤保留属性值符合模式地实体。
+     *
+     * 请使用星号“*”作为模糊匹配标记，使用“\*”作为转义。
+     *
+     * @param  string $attribute 属性名
+     * @param  string $pattern   模式
+     * @return self
+     */
+    public function filterLike($attribute, $pattern);
+
+    /**
      * 过滤掉属性值等于预期值地实体。
      *
      * @param  string $attribute 属性名
@@ -196,6 +221,17 @@ interface ISet extends Countable, Iterator
      * @return self
      */
     public function excludeBetween($attribute, $min, $max);
+
+    /**
+     * 过滤掉属性值符合模式地实体。
+     *
+     * 请使用星号“*”作为模糊匹配标记，使用“\*”作为转义。
+     *
+     * @param  string $attribute 属性名
+     * @param  string $pattern   模式
+     * @return self
+     */
+    public function excludeLike($attribute, $pattern);
 
     /**
      * 正向排序。

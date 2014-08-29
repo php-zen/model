@@ -416,6 +416,11 @@ abstract class Model extends Core\Component implements IModel
                 return $m_value < $value;
             case ISet::OP_BT:
                 return $m_value > $value[0] && $m_value < $value[1];
+            case ISet::OP_LK:
+                return !!preg_match(
+                    str_replace(array('\\\\\\*', '\\*'), array('*', '.+'), preg_quote($value)),
+                    $m_value
+                );
             case ISet::OP_NE:
                 return $m_value != $value;
             case ISet::OP_NI:
@@ -426,6 +431,11 @@ abstract class Model extends Core\Component implements IModel
                 return $m_value <= $value;
             case ISet::OP_NB:
                 return $m_value <= $value[0] || $m_value >= $value[1];
+            case ISet::OP_NL:
+                return !preg_match(
+                    str_replace(array('\\\\\\*', '\\*'), array('*', '.+'), $value),
+                    $m_value
+                );
         }
 
         return false;
