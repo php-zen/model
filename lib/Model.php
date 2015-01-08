@@ -3,7 +3,7 @@
  * 定义模型组件。
  *
  * @author    Snakevil Zen <zsnakevil@gmail.com>
- * @copyright © 2014 SZen.in
+ * @copyright © 2015 SZen.in
  * @license   LGPL-3.0+
  */
 
@@ -170,7 +170,7 @@ abstract class Model extends Core\Component implements IModel
     final protected function __construct()
     {
         $this->dao = $this->newDao();
-        $this->zenStaging = array();
+        $this->zenStaging = array('id' => '');
     }
 
     /**
