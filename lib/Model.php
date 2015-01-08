@@ -323,7 +323,7 @@ abstract class Model extends Core\Component implements IModel
             return $this;
         }
         $s_class = get_class($this);
-        if (isset($a_stage['id'])) {
+        if (isset($a_stage['id']) && $a_stage['id']) {
             $this->dao->update($a_stage['id'], $a_diff);
             if ($a_stage['id'] != $this->id) {
                 unset(self::$zenEntities[$s_class][$a_stage['id']]);
