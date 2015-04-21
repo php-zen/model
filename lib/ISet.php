@@ -259,9 +259,9 @@ interface ISet extends Countable, Iterator
     /**
      * 按指定位置截取实体集合。
      *
-     * @param  int  $offset 起始位置
      * @param  int  $size   数量限制
+     * @param  int  $offset 可选。起始位置
      * @return self
      */
-    public function crop($offset, $size);
+    public function crop($size, $offset = 0);
 }
