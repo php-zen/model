@@ -33,5 +33,6 @@
             "/share",
             ".gitignore"
         ]
-    }
+    },
+    "bin": ["bin/model-gen"]
 }
