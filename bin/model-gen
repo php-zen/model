@@ -1,0 +1,67 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * model,modelSet,Dao文件自动生成工具。
+ * 目前只支持定义字段时标识主键的写法。
+ * Usage: model-gen <PACKAGE NAME> <DDL FILE PATH> <DIST DIR PATH>
+ *
+ * @author    Yao <yaogaoyu@gmail.com>
+ * @copyright © 2016 BiGood.com
+ * @license   GPL-3.0+
+ */
+
+require_once(__DIR__ . '/../lib/ModelGenerator.php');
+
+if (4 > $argc || $argv[1] == '-h' || $argv[1] == '--help') {
+    fwrite(STDERR, sprintf("Usage: model-gen <PACKAGE NAME> <DDL FILE PATH> <DIST DIR PATH>\n"));
+    exit(1);
+}
+
+$PACKAGE = $argv[1];
+$SQL_PATH = $argv[2];
+$DIST_PATH = $argv[3];
+
+foreach (table_split(file_get_contents($SQL_PATH)) as $s_table) {
+    try {
+        $o_gen = new Zen\Model\ModelGenerator($s_table, $PACKAGE);
+        gen_dir($DIST_PATH);
+        file_put_contents($DIST_PATH . '/' . $o_gen->getModelName() . '.php', $o_gen->genModel());
+        file_put_contents($DIST_PATH . '/' . $o_gen->getModelName() . 'Set.php', $o_gen->genModelSet());
+        gen_dir($DIST_PATH . '/Dao');
+        file_put_contents($DIST_PATH . '/Dao/' . $o_gen->getModelName() . '.php', $o_gen->genDao());
+        fwrite(STDERR, sprintf("表 %s 生成成功。\n", $o_gen->getTableName()));
+    } catch (Exception $ex) {
+        fwrite(STDERR, sprintf("%s\n", $ex->getMessage()));
+    }
+}
+
+/**
+ * SQL脚本内容分段函数
+ *
+ * @param $sql  string   SQL脚本内容
+ */
+function table_split($sql)
+{
+    $reg = '/create table .+\(.*\)(?:;|;?$)/isU';
+    preg_match_all($reg, $sql, $ddlArr);
+    return $ddlArr[0];
+}
+
+/**
+ * 生成目录
+ *
+ * @param $dirPath  string   文件保存目录路径
+ */
+function gen_dir($dirPath)
+{
+    if (empty($dirPath) || (file_exists($dirPath) && !is_dir($dirPath))) {
+        throw new Exception('未指定文件保存路径或指定保存路径不是有效目录。');
+    }
+    if (!is_dir($dirPath)) {
+        $dir = mkdir($dirPath, 0777, true);
+        if (!$dir) {
+            throw new Exception('创建目录失败。');
+        }
+    }
+}
