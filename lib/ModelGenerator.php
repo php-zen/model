@@ -12,7 +12,7 @@ namespace Zen\Model;
 use Exception;
 
 /**
- * 根据DDL语句生成Model，ModelSet，Dao的内容
+ * 根据DDL语句生成Model，ModelSet，Dao的内容.
  */
 class ModelGenerator
 {
@@ -38,22 +38,21 @@ class ModelGenerator
     private $daoTemplate;
 
     /**
-     * ddl语句的解析结果
+     * ddl语句的解析结果.
      *
      * @var array
      */
     private $ormInfo;
 
     /**
-     * Model所属包
+     * Model所属包.
      *
      * @var string
      */
     private $package;
 
-
     /**
-     * 构造函数
+     * 构造函数.
      */
     public function __construct($ddl, $package)
     {
@@ -65,7 +64,7 @@ class ModelGenerator
     }
 
     /**
-     * 生成Model内容
+     * 生成Model内容.
      *
      * @return string Model文件内容
      */
@@ -82,18 +81,19 @@ class ModelGenerator
             $fieldCases .= "            case '".substr($field['varName'], 1)."':\n";
             $validatorHash .= empty($field['varRange']) ?
             '' :
-            ('            ' . substr($field['varName'], 1) . ' => ' . $field['varRange'] . ",\n");
+            ('            '.substr($field['varName'], 1).' => '.$field['varRange'].",\n");
         }
         $modelContent = str_replace('#{propertiesAnnotation}', $propertiesAnnotation, $modelContent);
         $modelContent = str_replace('#{fields}', substr($fields, 0, strlen($fields) - 2), $modelContent);
         $modelContent = str_replace('#{fieldCases}', substr($fieldCases, 0, strlen($fieldCases) - 1), $modelContent);
         $modelContent =
             str_replace('#{validatorHash}', substr($validatorHash, 0, strlen($validatorHash) - 2), $modelContent);
+
         return $modelContent;
     }
 
     /**
-     * 生成ModelSet内容
+     * 生成ModelSet内容.
      *
      * @return string ModelSet文件内容
      */
@@ -102,11 +102,12 @@ class ModelGenerator
         $modelSetContent = str_replace('#{package}', $this->package, $this->modelSetTemplate);
         $modelSetContent = str_replace('#{namespace}', $this->package.'\Model', $modelSetContent);
         $modelSetContent = str_replace('#{clsName}', $this->ormInfo['modelName'], $modelSetContent);
+
         return $modelSetContent;
     }
 
     /**
-     * 生成Dao内容
+     * 生成Dao内容.
      *
      * @return string Dao文件内容
      */
@@ -120,14 +121,15 @@ class ModelGenerator
         $daoContent = str_replace('#{pkVarName}', substr($this->ormInfo['pkVarName'], 1), $daoContent);
         $fieldsMap = '';
         foreach ($this->ormInfo['fields'] as $index => $field) {
-            $fieldsMap .= "        '" . $field['name'] . "' => '" . substr($field['varName'], 1) . "',\n";
+            $fieldsMap .= "        '".$field['name']."' => '".substr($field['varName'], 1)."',\n";
         }
-        $daoContent = str_replace('#{fieldsMap}', substr($fieldsMap, 0, strlen($fieldsMap)-2), $daoContent);
+        $daoContent = str_replace('#{fieldsMap}', substr($fieldsMap, 0, strlen($fieldsMap) - 2), $daoContent);
+
         return $daoContent;
     }
 
     /**
-     * 获取表名
+     * 获取表名.
      *
      * @return string ddl创建的表名
      */
@@ -137,7 +139,7 @@ class ModelGenerator
     }
 
     /**
-     * 获取Model名
+     * 获取Model名.
      *
      * @return string 表对应的Model名
      */
@@ -353,9 +355,10 @@ DAO_TEMPLATE;
     }
 
     /**
-     * 解析DDL语句
+     * 解析DDL语句.
      *
      * @param $ddl DDL语句（create table语句）
+     *
      * @return array 解析后的table-model映射信息
      */
     private function parseDDL($ddl)
@@ -364,14 +367,14 @@ DAO_TEMPLATE;
         // 获取表名
         $reg = '/create table (\S+)\s*(?:(?X)\()(.*)(?:\)$|\);$)/isU';
         preg_match($reg, $ddl, $result);
-        $info['tableName'] = $result[1];
+        $info['tableName'] = preg_replace('/`/', '', $result[1]);
         // 根据表名生成model名
-        $tableNameSplits = split('[-_]', $info['tableName']);
+        $tableNameSplits = preg_split('/[-_]/', $info['tableName']);
         if (sizeof($tableNameSplits) == 1) {
-            $info['modelName'] = strtoupper($info['tableName'][0]).strtoLower(substr($info['tableName'], 1));
+            $info['modelName'] = strtoupper($info['tableName'][0]).strtolower(substr($info['tableName'], 1));
         } else {
             foreach ($tableNameSplits as $index => $value) {
-                $info['modelName'] .= (strtoupper($value[0]).strtoLower(substr($value, 1)));
+                $info['modelName'] .= (strtoupper($value[0]).strtolower(substr($value, 1)));
             }
         }
         // $info['fieldsStr'] = preg_replace('/(?:^\s|\s)*((?:\S\s?)+(?:,|\S))(?:\s*|\s*$)/ms', '${1}', $result[2]);
@@ -380,32 +383,42 @@ DAO_TEMPLATE;
         $fieldsStr = preg_replace('/\s*,\s*/', ',', $fieldsStr);
         // 分割字段，使字段变为一个数组
         $preSplitStr = preg_replace('/(\S+|\)),((?U)[^\)]+\s\S*)/', '$1@$2', $fieldsStr);
-        $fieldStrArr = split("@", $preSplitStr);
+        $fieldStrArr = preg_split('/@/', $preSplitStr);
         $info['fields'] = array();
-        $info['pk'] = '';
         foreach ($fieldStrArr as $index => $fieldStr) {
-            $fieldName = substr($fieldStr, 0, strpos($fieldStr, " "));
-            $fieldType = preg_replace('/\s+((?U)\S\s*)+/', '', substr($fieldStr, strpos($fieldStr, " ")+1));
+            $fieldName = substr($fieldStr, 0, strpos($fieldStr, ' '));
+            $fieldName = preg_replace('/`/', '', $fieldName);
+            if (preg_match('/^PRIMARY/', $fieldName)) {
+                preg_match('/.*PRIMARY KEY \(`(\S+)`\).*/', $fieldStr, $pk);
+                $info['pkField'] = $pk[1];
+                $info['pkVarName'] = $this->genFieldName($info['pkField']);
+                continue;
+            }
+            if (preg_match('/^UNIQUE/', $fieldName)) {
+                continue;
+            }
+            $fieldType = preg_replace('/\s+((?U)\S\s*)+/', '', substr($fieldStr, strpos($fieldStr, ' ') + 1));
             $info['fields'][$index]['name'] = $fieldName;
             $info['fields'][$index]['type'] = $fieldType;
             // 根据字段名生成model名
-            $fieldNameSplits = split('[-_]', $fieldName);
-            if (sizeof($fieldNameSplits) == 1) {
-                $info['fields'][$index]['varName'] = '$'.strtolower($fieldName[0]).substr($fieldName, 1);
-            } else {
-                foreach ($fieldNameSplits as $fieldIndex => $value) {
-                    $info['fields'][$index]['varName'] .= $fieldIndex == 0 ?
-                        ('$' . strtolower($value[0])) :
-                        strtoupper($value[0]) . strtolower(substr($value, 1));
-                }
-            }
+            $info['fields'][$index]['varName'] = $this->genFieldName($fieldName);
+            // $fieldNameSplits = preg_split('/[-_]/', $fieldName);
+            // if (sizeof($fieldNameSplits) == 1) {
+            //     $info['fields'][$index]['varName'] = '$'.strtolower($fieldName[0]).substr($fieldName, 1);
+            // } else {
+            //     foreach ($fieldNameSplits as $fieldIndex => $value) {
+            //         $info['fields'][$index]['varName'] .= $fieldIndex == 0 ?
+            //             ('$'.strtolower($value[0])) :
+            //             strtoupper($value[0]).strtolower(substr($value, 1));
+            //     }
+            // }
             // 根据字段类型生成model属性类型
             $var = $this->genVar($info['fields'][$index]['varName'], $fieldType);
             $info['fields'][$index]['varType'] = $var['type'];
             if (!empty($var['range'])) {
                 $info['fields'][$index]['varRange'] = $var['range'];
             }
-            $isPK = strpos($fieldStr, "primary key");
+            $isPK = strpos($fieldStr, 'primary key');
             if ($isPK) {
                 $info['pkField'] = $fieldName;
                 $info['pkVarName'] = $info['fields'][$index]['varName'];
@@ -414,23 +427,48 @@ DAO_TEMPLATE;
         if (empty($info['pkField']) || empty($info['pkVarName'])) {
             throw new Exception('表 '.$info['tableName'].' 未设置主键字段。');
         }
+
         return $info;
     }
 
     /**
-     * 生成字段类型及范围（char或varchar类型才有范围）
+     * 根据字段名生成属性名.
+     *
+     * @param $fieldName 字段名
+     *
+     * @return 属性名
+     */
+    private function genFieldName($fieldName)
+    {
+        $fieldNameSplits = preg_split('/[-_]/', $fieldName);
+        if (sizeof($fieldNameSplits) == 1) {
+            return '$'.strtolower($fieldName[0]).substr($fieldName, 1);
+        } else {
+            $result = '';
+            foreach ($fieldNameSplits as $fieldIndex => $value) {
+                $result .= $fieldIndex == 0 ?
+                    ('$'.strtolower($value[0])).substr($value, 1) :
+                    strtoupper($value[0]).strtolower(substr($value, 1));
+            }
+
+            return $result;
+        }
+    }
+
+    /**
+     * 生成字段类型及范围（char或varchar类型才有范围）.
      *
      * @param $varName 字段对应的属性名
      * @param $fieldType 字段类型
+     *
      * @return 字段对应的属性类型
      */
     private function genVar($varName, $fieldType)
     {
         $type = substr($fieldType, 0, strpos($fieldType, '(') ? strpos($fieldType, '(') : strlen($fieldType));
-        // var_dump($fieldType.strpos($fieldType, '('));
         if (strpos($fieldType, '(')) {
             $rangeStr = preg_replace('/(\S+\()|(\)\S*)/', '', $fieldType);
-            $rageArr = split(',', $rangeStr);
+            $rageArr = preg_split('/,/', $rangeStr);
             $min = sizeof($rageArr) > 1 ? $rageArr[0] : 0;
             $max = sizeof($rageArr) > 1 ? $rageArr[1] : $rageArr[0];
             $range = $min.', '.$max;
@@ -451,26 +489,29 @@ DAO_TEMPLATE;
                 $var['type'] = 'string';
                 break;
         }
+
         return $var;
     }
 
     /**
-     * 生成关于字段映射的注释内容
+     * 生成关于字段映射的注释内容.
      *
      * @param $varName 字段对应的属性名
      * @param $fieldType 字段类型
+     *
      * @return 字段映射的注释内容
      */
     private function genModelPropAnnotation($varName, $fieldType)
     {
-        return " * @property    ".$fieldType."    ".$varName."\n";
+        return ' * @property    '.$fieldType.'    '.$varName."\n";
     }
 
     /**
-     * 生成字段定义及注释内容
+     * 生成字段定义及注释内容.
      *
      * @param $varName 字段对应的属性名
      * @param $varType 字段对应的属性类型
+     *
      * @return string model中的属性注释及属性定义
      */
     private function genModelProp($varName, $varType)
@@ -487,6 +528,7 @@ DAO_TEMPLATE;
 FIELD_TEMPLATE;
         $field = str_replace('#{varType}', $varType, $fieldTemplate);
         $field = str_replace('#{varName}', $varName, $field);
+
         return $field."\n\n";
     }
 }

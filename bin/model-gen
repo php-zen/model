@@ -7,7 +7,7 @@
  * Usage: model-gen <PACKAGE NAME> <DDL FILE PATH> <DIST DIR PATH>
  *
  * @author    Yao <yaogaoyu@gmail.com>
- * @copyright © 2016 BiGood.com
+ * @copyright © 2016 SZen.in
  * @license   GPL-3.0+
  */
 
