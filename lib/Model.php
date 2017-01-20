@@ -3,7 +3,7 @@
  * 定义模型组件。
  *
  * @author    Snakevil Zen <zsnakevil@gmail.com>
- * @copyright © 2015 SZen.in
+ * @copyright © 2017 SZen.in
  * @license   LGPL-3.0+
  */
 
@@ -14,10 +14,6 @@ use Zen\Core;
 /**
  * 模型组件。
  *
- * @package Zen\Model
- * @version 0.1.0
- * @since   0.1.0
- *
  * @property-read scalar $id 编号
  */
 abstract class Model extends Core\Component implements IModel
@@ -27,7 +23,8 @@ abstract class Model extends Core\Component implements IModel
      *
      * @internal
      *
-     * @param  scalar $offset 属性名
+     * @param scalar $offset 属性名
+     *
      * @return bool
      */
     final public function offsetExists($offset)
@@ -40,7 +37,8 @@ abstract class Model extends Core\Component implements IModel
      *
      * @internal
      *
-     * @param  scalar $property
+     * @param scalar $property
+     *
      * @return bool
      */
     protected function zenIsset($property)
@@ -53,7 +51,8 @@ abstract class Model extends Core\Component implements IModel
      *
      * @internal
      *
-     * @param  scalar $offset 属性名
+     * @param scalar $offset 属性名
+     *
      * @return mixed
      */
     final public function offsetGet($offset)
@@ -66,9 +65,8 @@ abstract class Model extends Core\Component implements IModel
      *
      * @internal
      *
-     * @param  scalar $offset 属性名
-     * @param  mixed  $value  新值
-     * @return void
+     * @param scalar $offset 属性名
+     * @param mixed  $value  新值
      */
     final public function offsetSet($offset, $value)
     {
@@ -80,8 +78,7 @@ abstract class Model extends Core\Component implements IModel
      *
      * @internal
      *
-     * @param  scalar $offset 属性名
-     * @return void
+     * @param scalar $offset 属性名
      */
     final public function offsetUnset($offset)
     {
@@ -97,7 +94,7 @@ abstract class Model extends Core\Component implements IModel
     {
         return array(
             'dao',
-            'zenStaging'
+            'zenStaging',
         );
     }
 
@@ -125,7 +122,7 @@ abstract class Model extends Core\Component implements IModel
      *
      * @return mixed[]
      */
-    final public function toArray()
+    public function toArray()
     {
         return $this->zenStaging;
     }
@@ -133,7 +130,8 @@ abstract class Model extends Core\Component implements IModel
     /**
      * {@inheritdoc}
      *
-     * @param  scalar[] $attributes 属性集合
+     * @param scalar[] $attributes 属性集合
+     *
      * @return self
      */
     final public static function create($attributes)
@@ -142,7 +140,7 @@ abstract class Model extends Core\Component implements IModel
         if (!is_array(self::$zenEntities)) {
             self::$zenEntities = array();
         }
-        $o_entity = new static;
+        $o_entity = new static();
         $a_attrs = get_object_vars($o_entity);
         foreach ($o_entity->listNonAttributes() as $ii) {
             unset($a_attrs[$ii]);
@@ -165,7 +163,7 @@ abstract class Model extends Core\Component implements IModel
     protected $dao;
 
     /**
-     * 构造函数
+     * 构造函数.
      */
     final protected function __construct()
     {
@@ -183,7 +181,8 @@ abstract class Model extends Core\Component implements IModel
     /**
      * {@inheritdoc}
      *
-     * @param  scalar $id 编号
+     * @param scalar $id 编号
+     *
      * @return self
      */
     final public static function load($id)
@@ -193,7 +192,7 @@ abstract class Model extends Core\Component implements IModel
             self::$zenEntities = array();
         }
         if (!isset(self::$zenEntities[$s_class][$id])) {
-            $o_entity = new static;
+            $o_entity = new static();
             $o_entity->zenStaging['id'] = $id;
             $o_entity->reload($o_entity->dao->read($id));
             self::$zenEntities[$s_class][$id] = $o_entity;
@@ -207,7 +206,8 @@ abstract class Model extends Core\Component implements IModel
      *
      * @internal
      *
-     * @param  scalar[] $attributes 属性集合
+     * @param scalar[] $attributes 属性集合
+     *
      * @return self
      */
     final public static function loadFromAttributes($attributes)
@@ -221,7 +221,7 @@ abstract class Model extends Core\Component implements IModel
         }
         $s_id = $attributes['id'];
         if (!isset(self::$zenEntities[$s_class][$s_id])) {
-            $o_entity = new static;
+            $o_entity = new static();
             $o_entity->zenStaging['id'] = $s_id;
             self::$zenEntities[$s_class][$s_id] = $o_entity;
         }
@@ -249,7 +249,8 @@ abstract class Model extends Core\Component implements IModel
      *
      * @internal
      *
-     * @param  mixed[] $attributes 属性集合
+     * @param mixed[] $attributes 属性集合
+     *
      * @return self
      *
      * @throws ExAttributeMissing 当属性缺失时
@@ -296,7 +297,8 @@ abstract class Model extends Core\Component implements IModel
     /**
      * 实体载入事件。
      *
-     * @param  scalar[] $attributes 无法被直接映射地属性集合
+     * @param scalar[] $attributes 无法被直接映射地属性集合
+     *
      * @return scalar[]
      */
     protected function onLoad($attributes)
@@ -342,8 +344,6 @@ abstract class Model extends Core\Component implements IModel
 
     /**
      * 实体保存事件。
-     *
-     * @return void
      */
     protected function onSave()
     {
@@ -351,8 +351,6 @@ abstract class Model extends Core\Component implements IModel
 
     /**
      * {@inheritdoc}
-     *
-     * @return void
      */
     final public function destroy()
     {
@@ -372,8 +370,6 @@ abstract class Model extends Core\Component implements IModel
 
     /**
      * 实体（持久化数据）销毁事件。
-     *
-     * @return void
      */
     protected function onDestroy()
     {
@@ -397,9 +393,10 @@ abstract class Model extends Core\Component implements IModel
      *
      * @internal
      *
-     * @param  string $attribute 属性名
-     * @param  mixed  $value     值
-     * @param  string $op        运算符
+     * @param string $attribute 属性名
+     * @param mixed  $value     值
+     * @param string $op        运算符
+     *
      * @return bool
      */
     final public function assert($attribute, $value, $op)
@@ -417,7 +414,7 @@ abstract class Model extends Core\Component implements IModel
             case ISet::OP_BT:
                 return $m_value > $value[0] && $m_value < $value[1];
             case ISet::OP_LK:
-                return !!preg_match(
+                return (bool) preg_match(
                     str_replace(array('\\\\\\*', '\\*'), array('*', '.+'), preg_quote($value)),
                     $m_value
                 );
@@ -463,8 +460,9 @@ abstract class Model extends Core\Component implements IModel
     /**
      * 验证给定值是否符合属性要求。
      *
-     * @param  string $property 属性名
-     * @param  mixed  $value    待设置地值
+     * @param string $property 属性名
+     * @param mixed  $value    待设置地值
+     *
      * @return bool
      */
     final protected function validate($property, $value)
